@@ -11,7 +11,13 @@ declare module 'fastify' {
 }
 
 const persistencePlugin: FastifyPluginAsync = async (fastify) => {
-  const client = postgres(settings.databaseUrl);
+  const client = postgres({
+    host: settings.dbHost,
+    port: settings.dbPort,
+    username: settings.dbUsername,
+    password: settings.dbPassword,
+    database: settings.dbName,
+  });
   const db = drizzle(client);
   fastify.decorate('db', db);
   fastify.addHook('onClose', async () => {
